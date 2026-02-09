@@ -1,0 +1,13 @@
+{
+  "module_name": "inspection-module",
+  "visibility": "private",
+  "namespace": "stations",
+  "language": "go",
+  "resource_type": "service",
+  "resource_subtype": "generic",
+  "model_name": "inspector",
+  "initialize_git": false,
+  "generator_version": "0.1.0",
+  "generated_on": "2026-02-09T18:10:20.464587Z",
+  "module_readme_link": "README.md"
+}
