@@ -2,18 +2,15 @@ package inspectionmodule
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"go.viam.com/rdk/logging"
 	"go.viam.com/rdk/resource"
 	generic "go.viam.com/rdk/services/generic"
+	"go.viam.com/rdk/services/vision"
 )
 
-var (
-	Inspector        = resource.NewModel("stations", "inspection-module", "inspector")
-	errUnimplemented = errors.New("unimplemented")
-)
+var Inspector = resource.NewModel("stations", "inspection-module", "inspector")
 
 func init() {
 	resource.RegisterService(generic.API, Inspector,
@@ -24,47 +21,31 @@ func init() {
 }
 
 type Config struct {
-	/*
-		Put config attributes here. There should be public/exported fields
-		with a `json` parameter at the end of each attribute.
-
-		Example config struct:
-			type Config struct {
-				Pin   string `json:"pin"`
-				Board string `json:"board"`
-				MinDeg *float64 `json:"min_angle_deg,omitempty"`
-			}
-
-		If your model does not need a config, replace *Config in the init
-		function with resource.NoNativeConfig
-	*/
+	Camera        string `json:"camera"`
+	VisionService string `json:"vision"`
 }
 
-// Validate ensures all parts of the config are valid and important fields exist.
-// Returns three values:
-//  1. Required dependencies: other resources that must exist for this resource to work.
-//  2. Optional dependencies: other resources that may exist but are not required.
-//  3. An error if any Config fields are missing or invalid.
-//
-// The `path` parameter indicates
-// where this resource appears in the machine's JSON configuration
-// (for example, "components.0"). You can use it in error messages
-// to indicate which resource has a problem.
 func (cfg *Config) Validate(path string) ([]string, []string, error) {
-	// Add config validation code here
-	return nil, nil, nil
+	if cfg.Camera == "" {
+		return nil, nil, fmt.Errorf("camera is required")
+	}
+	if cfg.VisionService == "" {
+		return nil, nil, fmt.Errorf("vision is required")
+	}
+	return []string{cfg.Camera, cfg.VisionService}, nil, nil
 }
 
 type inspectionModuleInspector struct {
 	resource.AlwaysRebuild
 
-	name resource.Name
-
+	name   resource.Name
 	logger logging.Logger
 	cfg    *Config
 
 	cancelCtx  context.Context
 	cancelFunc func()
+
+	detector vision.Service
 }
 
 func newInspectionModuleInspector(ctx context.Context, deps resource.Dependencies, rawConf resource.Config, logger logging.Logger) (resource.Resource, error) {
@@ -72,21 +53,24 @@ func newInspectionModuleInspector(ctx context.Context, deps resource.Dependencie
 	if err != nil {
 		return nil, err
 	}
-
 	return NewInspector(ctx, deps, rawConf.ResourceName(), conf, logger)
-
 }
 
-func NewInspector(ctx context.Context, deps resource.Dependencies, name resource.Name, conf *Config, logger logging.Logger) (resource.Resource, error) {
-
+func NewInspector(ctx context.Context, deps resource.Dependencies, name resource.Name, cfg *Config, logger logging.Logger) (resource.Resource, error) {
 	cancelCtx, cancelFunc := context.WithCancel(context.Background())
+
+	detector, err := vision.FromProvider(deps, cfg.VisionService)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get vision service %q: %w", cfg.VisionService, err)
+	}
 
 	s := &inspectionModuleInspector{
 		name:       name,
 		logger:     logger,
-		cfg:        conf,
+		cfg:        cfg,
 		cancelCtx:  cancelCtx,
 		cancelFunc: cancelFunc,
+		detector:   detector,
 	}
 	return s, nil
 }
@@ -95,12 +79,33 @@ func (s *inspectionModuleInspector) Name() resource.Name {
 	return s.name
 }
 
+// detect calls the vision service and returns the label and confidence
+// of the highest-confidence detection from the camera.
+//
+// TODO: Implement this method.
+// 1. Call s.detector.DetectionsFromCamera() with s.cfg.Camera
+// 2. If no detections, return "NO_DETECTION", 0, nil
+// 3. Find the detection with the highest Score()
+// 4. Return its Label() and Score()
+func (s *inspectionModuleInspector) detect(ctx context.Context) (string, float64, error) {
+	return "", 0, fmt.Errorf("not implemented: fill in the detect method")
+}
+
 func (s *inspectionModuleInspector) DoCommand(ctx context.Context, cmd map[string]interface{}) (map[string]interface{}, error) {
-	return nil, fmt.Errorf("not implemented")
+	if _, ok := cmd["detect"]; ok {
+		label, confidence, err := s.detect(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return map[string]interface{}{
+			"label":      label,
+			"confidence": confidence,
+		}, nil
+	}
+	return nil, fmt.Errorf("unknown command: %v", cmd)
 }
 
 func (s *inspectionModuleInspector) Close(context.Context) error {
-	// Put close code here
 	s.cancelFunc()
 	return nil
 }
