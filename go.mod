@@ -102,7 +102,7 @@ require (
 	github.com/go-git/go-billy/v5 v5.6.2 // indirect
 	github.com/go-git/go-git/v5 v5.16.2 // indirect
 	github.com/go-gl/mathgl v1.0.0 // indirect
-	github.com/go-jose/go-jose/v4 v4.1.3 // indirect
+	github.com/go-jose/go-jose/v4 v4.1.4 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
