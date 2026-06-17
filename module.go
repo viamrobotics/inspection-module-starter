@@ -105,6 +105,10 @@ func (s *inspectionModuleInspector) DoCommand(ctx context.Context, cmd map[strin
 	return nil, fmt.Errorf("unknown command: %v", cmd)
 }
 
+func (s *inspectionModuleInspector) Status(ctx context.Context) (map[string]interface{}, error) {
+	return map[string]interface{}{}, nil
+}
+
 func (s *inspectionModuleInspector) Close(context.Context) error {
 	s.cancelFunc()
 	return nil
