@@ -3,7 +3,7 @@ module inspectionmodule
 go 1.25.9
 
 require (
-	github.com/erh/vmodutils v0.3.11
+	github.com/erh/vmodutils v0.4.0
 	go.viam.com/rdk v1.0.0
 )
 
@@ -196,7 +196,7 @@ require (
 	go.uber.org/goleak v1.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.28.0 // indirect
-	go.viam.com/api v0.1.569 // indirect
+	go.viam.com/api v0.1.571 // indirect
 	go.viam.com/test v1.2.5 // indirect
 	go.viam.com/utils v0.6.6 // indirect
 	go4.org/unsafe/assume-no-moving-gc v0.0.0-20230525183740-e7c30c78aeb2 // indirect
