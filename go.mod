@@ -4,7 +4,7 @@ go 1.25.10
 
 require (
 	github.com/erh/vmodutils v0.4.0
-	go.viam.com/rdk v1.6.0
+	go.viam.com/rdk v1.9.0
 )
 
 require (
@@ -59,7 +59,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/chenzhekl/goply v0.0.0-20190930133256-258c2381defd // indirect
 	github.com/chewxy/hm v1.0.0 // indirect
-	github.com/chewxy/math32 v1.0.8 // indirect
+	github.com/chewxy/math32 v1.11.2 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.5.0 // indirect
 	github.com/cloudwego/base64x v0.1.6 // indirect
@@ -197,9 +197,9 @@ require (
 	go.uber.org/goleak v1.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.28.0 // indirect
-	go.viam.com/api v0.1.578 // indirect
+	go.viam.com/api v0.1.579 // indirect
 	go.viam.com/test v1.2.5 // indirect
-	go.viam.com/utils v0.12.0 // indirect
+	go.viam.com/utils v0.13.0 // indirect
 	go4.org/unsafe/assume-no-moving-gc v0.0.0-20230525183740-e7c30c78aeb2 // indirect
 	golang.org/x/crypto v0.55.0 // indirect
 	golang.org/x/exp v0.0.0-20260611194520-c48552f49976 // indirect
